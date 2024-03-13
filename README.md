@@ -10,7 +10,21 @@ docker compose up -d
 
 2. Rename the .env.template to .env
 3. Replace environment variables
-4. Run SEED for [create DB local](localhost:3000/api/seed)
+4. Execute commands:
+
+```
+npm i
+npm run dev
+```
+
+5. Run these prism commands:
+
+```
+npx prisma migrate dev
+npx prisma generate
+```
+
+6. Run SEED for [create DB local](localhost:3000/api/seed)
 
 # Prisma Commands
 
