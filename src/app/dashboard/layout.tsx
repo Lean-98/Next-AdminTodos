@@ -1,10 +1,15 @@
 import { SideBar, TopMenu } from '@/components'
+import { getUserSessionServer } from '../api/auth/actions/auth-actions'
+import { redirect } from 'next/navigation'
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const user = await getUserSessionServer()
+
+  if (!user) redirect('/api/auth/signin')
   return (
     <>
       <SideBar />

@@ -1,36 +1,40 @@
 'use client'
 import { FormEvent, useState } from 'react'
 import { IoTrashOutline } from 'react-icons/io5'
-import { addTodo, deleteCompleted } from '../actions/todos-actions'
-// import { useRouter } from 'next/navigation'
-// import * as todosApi from '@/todos/helpers/todos'
+// import { addTodo, deleteCompleted } from '../actions/todos-actions'
+// import { getUserSessionServer } from '@/app/api/auth/actions/auth-actions'
+import { useRouter } from 'next/navigation'
+import * as todosApi from '@/todos/helpers/todos'
 
 export const NewTodo = () => {
+  const router = useRouter()
   const [description, setDescription] = useState('')
+  // const user = getUserSessionServer()
 
   // METHOD: API REST
-  // const router = useRouter()
-  // const onSubmit = async (e: FormEvent) => {
-  //   e.preventDefault()
-  //   if (description.trim().length === 0) return
-
-  //   todosApi.createTodo(description)
-  //   setDescription('')
-  //   router.refresh()
-  // }
-
-  // const deletedCompleted = async () => {
-  //   await todosApi.deleteCompletedTodos()
-  //   router.refresh()
-  // }
-
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (description.trim().length === 0) return
 
-    addTodo(description)
+    await todosApi.createTodo(description)
+    router.refresh()
+
     setDescription('')
   }
+
+  const deleteCompleted = async () => {
+    await todosApi.deleteCompletedTodos()
+    router.refresh()
+  }
+
+  //FIXME: METHOD: SERVER ACTIONS
+  // const onSubmit = async (e: FormEvent) => {
+  //   e.preventDefault()
+  //   if (description.trim().length === 0) return
+
+  //   await addTodo(description, user.id)
+  //   setDescription('')
+  // }
 
   return (
     <form onSubmit={onSubmit} className='flex w-full'>

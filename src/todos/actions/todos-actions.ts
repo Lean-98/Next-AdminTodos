@@ -1,9 +1,10 @@
 'use server'
 
-import { postSchema } from '@/app/api/todos/route'
 import prisma from '@/lib/prisma'
 import { Todo } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
+import { getUserSessionServer } from '@/app/api/auth/actions/auth-actions'
+import { postSchema } from '@/app/api/todos/route'
 
 export const toggleTodo = async (
   id: string,
@@ -24,13 +25,16 @@ export const toggleTodo = async (
   return updateTodo
 }
 
-export const addTodo = async (description: string) => {
+export const addTodo = async (description: string, userId: string) => {
   try {
-    //    const { complete, description } = await postSchema.validate(
-    //      await request.json()
-    //    )
-
-    const todo = await prisma.todo.create({ data: { description } })
+    const user = await getUserSessionServer()
+    //FIXME:
+    const todo = await prisma.todo.create({
+      data: {
+        description,
+        userId: user?.id,
+      },
+    })
 
     revalidatePath('/dashboard/server-todos')
     return todo
